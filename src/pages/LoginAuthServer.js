@@ -32,9 +32,19 @@ function LoginAuthServer(props) {
     useEffect(() => {
         if (localStorage.getItem('token')) {
             const url = `${process.env.REACT_APP_SERVER_URL}/api/oauth/code?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`
-            window &&
-                window.location &&
-                window.location.replace(url)
+            const config = {
+                headers: { Authorization: localStorage.getItem('token') }
+            };
+            axios.get(url, config)
+                .then(res => {
+                    console.log(res)
+                    if (res && res.data && res.data.data && res.data.data.url) {
+                        window && window.location && window.location.replace(res.data.data.url)
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
         }
     }, [])
 
