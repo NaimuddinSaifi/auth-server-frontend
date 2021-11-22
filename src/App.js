@@ -9,7 +9,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route exact path="/" element={<LoginAuthServer />} />
+        <Route exact path="/oauth/authorize" element={<LoginAuthServer />} />
         <Route exact path="/consent" element={<ConsentScreen />} />
         <Route exact path="/cred" element={<Cred />} />
         <Route exact path="/get-cred" element={<GetCred />} />

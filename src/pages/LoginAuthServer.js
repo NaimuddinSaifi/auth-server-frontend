@@ -1,22 +1,23 @@
 import '../App.css'
 import { useState } from 'react'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate , useLocation } from 'react-router-dom'
 
 function LoginAuthServer(props) {
     const navigate = useNavigate()
+    const location = useLocation()
     const [userName, setuserName] = useState('')
     const [password, setpassword] = useState('')
-
+    const clientId = new URLSearchParams(location && location.search).get("client_id")
     const handleSubmit = () => {
-        console.log({ userName, password })
         const url = `${process.env.REACT_APP_SERVER_URL}/api/user-server-login`
         const data = { userName, password }
+        console.log(url, data)
         axios.post(url, data)
             .then(res => {
                 console.log(res)
                 localStorage.setItem('token', res && res.data && res.data.data.token)
-                navigate('/consent')
+                navigate(`/consent?scope=user:email&client_id=${clientId}`)
             })
             .catch(err => {
                 console.log(err)
