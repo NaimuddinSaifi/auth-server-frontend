@@ -1,7 +1,8 @@
 import '../App.css'
 import { useState } from 'react'
 import axios from 'axios'
-import { useNavigate , useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useEffect } from 'react/cjs/react.development'
 
 function LoginAuthServer(props) {
     const navigate = useNavigate()
@@ -27,6 +28,16 @@ function LoginAuthServer(props) {
                 console.log(err)
             })
     }
+
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            const url = `${process.env.REACT_APP_SERVER_URL}/api/oauth/code?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`
+            window &&
+                window.location &&
+                window.location.replace(url)
+        }
+    }, [])
+
     return (
         <div className="card">
             <div className="shadow">

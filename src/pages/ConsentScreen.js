@@ -1,9 +1,10 @@
+import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 
 function ConsentScreen(props) {
     const navigate = useNavigate()
     const location = useLocation()
-    
+
     const handleAllow = () => {
         if (localStorage.getItem('token')) {
             const clientId = new URLSearchParams(location && location.search).get("client_id")
@@ -14,6 +15,15 @@ function ConsentScreen(props) {
             window &&
                 window.location &&
                 window.location.replace(url)
+
+            // axios.get(url)
+            //     .then(res => {
+            //         console.log(res)
+            //     })
+            //     .catch(err => {
+            //         console.log(err)
+            //     })
+
         }
     }
 
