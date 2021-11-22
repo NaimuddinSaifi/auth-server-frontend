@@ -1,9 +1,9 @@
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useLocation } from "react-router-dom";
 
 function ConsentScreen(props) {
     const navigate = useNavigate()
-
+    const location = useLocation()
+    
     const handleAllow = () => {
         if (localStorage.getItem('token')) {
             const clientId = new URLSearchParams(location && location.search).get("client_id")

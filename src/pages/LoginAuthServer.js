@@ -29,7 +29,7 @@ function LoginAuthServer(props) {
     }
     return (
         <div className="card">
-            <div>
+            <div className="shadow">
                 <input value={userName}
                     placeholder="User Name"
                     onChange={(e) => setuserName(e.target.value)}
