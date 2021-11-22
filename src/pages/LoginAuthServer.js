@@ -8,7 +8,11 @@ function LoginAuthServer(props) {
     const location = useLocation()
     const [userName, setuserName] = useState('')
     const [password, setpassword] = useState('')
+
     const clientId = new URLSearchParams(location && location.search).get("client_id")
+    const state = new URLSearchParams(location && location.search).get("state")
+    const redirectUri = new URLSearchParams(location && location.search).get("redirect_uri")
+
     const handleSubmit = () => {
         const url = `${process.env.REACT_APP_SERVER_URL}/api/user-server-login`
         const data = { userName, password }
@@ -17,7 +21,7 @@ function LoginAuthServer(props) {
             .then(res => {
                 console.log(res)
                 localStorage.setItem('token', res && res.data && res.data.data.token)
-                navigate(`/consent?scope=user:email&client_id=${clientId}`)
+                navigate(`/consent?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`)
             })
             .catch(err => {
                 console.log(err)

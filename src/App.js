@@ -11,6 +11,7 @@ function App() {
       <Routes>
         <Route exact path="/oauth/authorize" element={<LoginAuthServer />} />
         <Route exact path="/consent" element={<ConsentScreen />} />
+        
         <Route exact path="/cred" element={<Cred />} />
         <Route exact path="/get-cred" element={<GetCred />} />
       </Routes>
