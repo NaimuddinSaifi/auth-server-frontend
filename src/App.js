@@ -4,12 +4,14 @@ import LoginAuthServer from './pages/LoginAuthServer';
 import ConsentScreen from './pages/ConsentScreen';
 import Cred from './pages/Cred';
 import GetCred from './pages/GetCred';
+import SignupAuthServer from './pages/SignupAuthServer';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route exact path="/oauth/authorize" element={<LoginAuthServer />} />
+        <Route exact path="/oauth/register" element={<SignupAuthServer />} />
         <Route exact path="/consent" element={<ConsentScreen />} />
         
         <Route exact path="/cred" element={<Cred />} />
