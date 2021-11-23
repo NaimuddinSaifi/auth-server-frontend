@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify"
 
 function ConsentScreen(props) {
     const navigate = useNavigate()
@@ -18,14 +19,20 @@ function ConsentScreen(props) {
             axios.get(url, config)
                 .then(res => {
                     console.log(res)
-                    if (res && res.data && res.data.data && res.data.data.url) {
-                           window && window.location && window.location.replace(res.data.data.url)
+                    if (res && res.data && res.data.code === 200) {
+                        window && window.location && window.location.replace(res.data.data.url)
+                    }
+                    if (res && res.data && res.data.code === 403) {
+                        toast('Unauthorized.')
+                    }
+                    if (res && res.data && res.data.code === 500) {
+                        toast('Internal Server Error.')
                     }
                 })
                 .catch(err => {
                     console.log(err)
+                    toast('Something Went Wrong.')
                 })
-
         }
     }
 

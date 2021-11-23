@@ -2,6 +2,7 @@ import '../App.css'
 import { useState } from 'react'
 import axios from 'axios'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 function SignupAuthServer(props) {
     const navigate = useNavigate()
@@ -12,27 +13,40 @@ function SignupAuthServer(props) {
     const clientId = new URLSearchParams(location && location.search).get("client_id")
     const state = new URLSearchParams(location && location.search).get("state")
     const redirectUri = new URLSearchParams(location && location.search).get("redirect_uri")
-
+    const loginUrl = `/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`
     const handleSubmit = () => {
         const url = `${process.env.REACT_APP_SERVER_URL}/api/user-server-signup`
         const data = { userName, password }
         console.log(url, data)
-        axios.post(url, data)
-            .then(res => {
-                console.log(res)
-                // localStorage.setItem('token', res && res.data && res.data.data.token)
-                // navigate(`/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`)
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        if (!userName || !password) {
+            toast('Please fill all fields.')
+        }
+        if (userName && password) {
+            axios.post(url, data)
+                .then(res => {
+                    console.log(res)
+                    if (res && res.data && res.data.code === 200) {
+                        toast('Signup Success.')
+                        navigate(loginUrl)
+                    }
+                    if (res && res.data && res.data.code === 404) {
+                        toast('User Alreday Exists.')
+                    }
+                    if (res && res.data && res.data.code === 500) {
+                        toast('Internal Server Error.')
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                    toast('Something Went Wrong.')
+                })
+        }
     }
-
-
 
     return (
         <div className="card">
             <div className="shadow">
+                <div className="center">  Signup </div>
                 <input value={userName}
                     placeholder="User Name"
                     onChange={(e) => setuserName(e.target.value)}
@@ -46,11 +60,11 @@ function SignupAuthServer(props) {
                 <div className="flex-center">
                     <button className="submit-btn"
                         onClick={handleSubmit}>
-                        SIGN UP
+                        SIGNUP
                     </button>
                 </div>
                 <div className="center">
-                    <Link to={`/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`}>
+                    <Link to={loginUrl}>
                         Already have an account ? Login
                     </Link>
                 </div>

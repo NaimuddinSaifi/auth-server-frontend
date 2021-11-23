@@ -3,6 +3,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useEffect } from 'react/cjs/react.development'
+import { toast } from 'react-toastify'
 
 function LoginAuthServer(props) {
     const navigate = useNavigate()
@@ -18,15 +19,31 @@ function LoginAuthServer(props) {
         const url = `${process.env.REACT_APP_SERVER_URL}/api/user-server-login`
         const data = { userName, password }
         console.log(url, data)
-        axios.post(url, data)
-            .then(res => {
-                console.log(res)
-                localStorage.setItem('token', res && res.data && res.data.data.token)
-                navigate(`/consent?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`)
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        if (!userName || !password) {
+            toast('Please fill all fields.')
+        }
+        if (userName && password) {
+            axios.post(url, data)
+                .then(res => {
+                    console.log(res)
+                    if (res && res.data && res.data.code === 200) {
+                        toast('Login Success.')
+                        localStorage.setItem('token', res && res.data && res.data.data.token)
+                        navigate(`/consent?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`)
+                    }
+                    if (res && res.data && res.data.code === 404) {
+                        toast('User Not Found.')
+                    }
+                    if (res && res.data && res.data.code === 500) {
+                        toast('Internal Server Error.')
+                    }
+                
+                })
+                .catch(err => {
+                    console.log(err)
+                    toast('Something Went Wrong.')
+                })
+        }
     }
 
     useEffect(() => {
@@ -35,15 +52,23 @@ function LoginAuthServer(props) {
             const config = {
                 headers: { Authorization: localStorage.getItem('token') }
             };
+
             axios.get(url, config)
                 .then(res => {
                     console.log(res)
-                    if (res && res.data && res.data.data && res.data.data.url) {
+                    if (res && res.data && res.data.code === 200) {
                         window && window.location && window.location.replace(res.data.data.url)
+                    }
+                    if (res && res.data && res.data.code === 403) {
+                        toast('Unauthorized')
+                    }
+                    if (res && res.data && res.data.code === 500) {
+                        toast('Internal Server Error.')
                     }
                 })
                 .catch(err => {
                     console.log(err)
+                    toast('Something Went Wrong.')
                 })
         }
     }, [])
@@ -66,11 +91,11 @@ function LoginAuthServer(props) {
                 <div className="flex-center">
                     <button className="submit-btn"
                         onClick={handleSubmit}>
-                        SUBMIT
+                        SIGNIN
                     </button>
                 </div>
                 <div className="center">
-                    <Link  to={`/oauth/register?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`}>
+                    <Link to={`/oauth/register?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`}>
                         Dont have an account ? Signup
                     </Link>
                 </div>
