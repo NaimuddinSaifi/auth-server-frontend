@@ -29,6 +29,7 @@ function LoginAuthServer(props) {
                     if (res && res.data && res.data.code === 200) {
                         toast('Login Success.')
                         localStorage.setItem('token', res && res.data && res.data.data.token)
+                        localStorage.setItem('userId', res && res.data && res.data.data.userId)
                         navigate(`/consent?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`)
                     }
                     if (res && res.data && res.data.code === 404) {
