@@ -38,30 +38,6 @@ function ConsentScreen(props) {
         }
     }
 
-    useEffect(() => {
-        const url = `${process.env.REACT_APP_SERVER_URL}/api/validate-client?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`
-        axios.get(url)
-            .then(res => {
-                console.log(res)
-                if (res && res.data && res.data.code === 200) {
-                    setappName(res.data.data.app_name)
-                }
-                if (res && res.data && res.data.code === 404) {
-                    toast('Invalid Client Id .')
-                }
-                if (res && res.data && res.data.code === 400) {
-                    toast('Redirect uri mismatch.')
-                }
-                if (res && res.data && res.data.code === 500) {
-                    toast('Internal Server Error.')
-                }
-            })
-            .catch(err => {
-                console.log(err)
-                toast('Something Went Wrong.')
-            })
-    }, [])
-
     return (
         <div className="flex-center-all">
             <div className="consent-card">
@@ -72,7 +48,7 @@ function ConsentScreen(props) {
                         </div>
                     </div>
                     <div className="user">
-                        <div className="user-img">  {localStorage && localStorage.getItem('userId').charAt(0).toUpperCase()} </div>
+                        <div className="user-img">  {localStorage && localStorage.getItem('userId') && localStorage.getItem('userId').charAt(0).toUpperCase()} </div>
                         <div className="user-name">   {localStorage && localStorage.getItem('userId')} </div>
 
                     </div>
