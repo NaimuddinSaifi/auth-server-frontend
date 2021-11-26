@@ -12,11 +12,11 @@ function ConsentScreen(props) {
     const redirectUri = new URLSearchParams(location && location.search).get("redirect_uri")
 
     const handleAllow = () => {
-        if (localStorage.getItem('token')) {
+        if (localStorage.getItem('user_token')) {
 
             const url = `${process.env.REACT_APP_SERVER_URL}/api/oauth/code?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`
             const config = {
-                headers: { Authorization: localStorage.getItem('token') }
+                headers: { Authorization: localStorage.getItem('user_token') }
             };
             axios.get(url, config)
                 .then(res => {
