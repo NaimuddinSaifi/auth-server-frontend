@@ -8,7 +8,7 @@ import { toast } from 'react-toastify'
 function LoginAuthServer(props) {
     const navigate = useNavigate()
     const location = useLocation()
-    const [userName, setuserName] = useState('')
+    const [userId, setuserId] = useState('')
     const [password, setpassword] = useState('')
 
     const clientId = new URLSearchParams(location && location.search).get("client_id")
@@ -16,21 +16,21 @@ function LoginAuthServer(props) {
     const redirectUri = new URLSearchParams(location && location.search).get("redirect_uri")
 
     const handleSubmit = () => {
-        const url = `${process.env.REACT_APP_SERVER_URL}/api/user-server-login`
-        const data = { userName, password }
+        const url = `${process.env.REACT_APP_SERVER_URL}/api/user/login`
+        const data = { userId, password }
         console.log(url, data)
-        if (!userName || !password) {
+        if (!userId || !password) {
             toast('Please fill all fields.')
         }
-        if (userName && password) {
+        if (userId && password) {
             axios.post(url, data)
                 .then(res => {
                     console.log(res)
                     if (res && res.data && res.data.code === 200) {
                         toast('Login Success.')
-                        localStorage.setItem('token', res && res.data && res.data.data.token)
-                        localStorage.setItem('userId', res && res.data && res.data.data.userId)
-                        navigate(`/consent?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`)
+                        localStorage.setItem('user_token', res && res.data && res.data.data.user_token)
+                        localStorage.setItem('user_id', res && res.data && res.data.data.user_id)
+                        navigate(`/oauth/consent?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`)
                     }
                     if (res && res.data && res.data.code === 404) {
                         toast('User Not Found.')
@@ -38,7 +38,7 @@ function LoginAuthServer(props) {
                     if (res && res.data && res.data.code === 500) {
                         toast('Internal Server Error.')
                     }
-                
+
                 })
                 .catch(err => {
                     console.log(err)
@@ -79,9 +79,9 @@ function LoginAuthServer(props) {
             <div className="shadow">
                 <div className="center">  Login </div>
 
-                <input value={userName}
-                    placeholder="User Name"
-                    onChange={(e) => setuserName(e.target.value)}
+                <input value={userId}
+                    placeholder="User Id"
+                    onChange={(e) => setuserId(e.target.value)}
                     type="text" className="login-input" />
                 <br />
                 <input value={password}

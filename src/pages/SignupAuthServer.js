@@ -15,8 +15,8 @@ function SignupAuthServer(props) {
     const redirectUri = new URLSearchParams(location && location.search).get("redirect_uri")
     const loginUrl = `/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`
     const handleSubmit = () => {
-        const url = `${process.env.REACT_APP_SERVER_URL}/api/user-server-signup`
-        const data = { userName, password }
+        const url = `${process.env.REACT_APP_SERVER_URL}/api/user`
+        const data = { userId: userName, password }
         console.log(url, data)
         if (!userName || !password) {
             toast('Please fill all fields.')
@@ -48,7 +48,7 @@ function SignupAuthServer(props) {
             <div className="shadow">
                 <div className="center">  Signup </div>
                 <input value={userName}
-                    placeholder="User Name"
+                    placeholder="User Id"
                     onChange={(e) => setuserName(e.target.value)}
                     type="text" className="login-input" />
                 <br />

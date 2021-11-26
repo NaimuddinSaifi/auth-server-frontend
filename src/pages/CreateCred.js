@@ -1,21 +1,24 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 function Cred(props) {
     const location = useLocation()
     const navigate = useNavigate()
-    const [redirectUri, setredirectUri] = useState('')
     const [appName, setappName] = useState('')
+    const [domainUrl, setdomainUrl] = useState('')
+    const [callbackUrl, setcallbackUrl] = useState('')
 
     const handleSubmit = () => {
-        const url = `${process.env.REACT_APP_SERVER_URL}/api/create-cred`
-        const data = { appName, redirectUri }
-        console.log(url, data)
-        axios.post(url, data)
+        const url = `${process.env.REACT_APP_SERVER_URL}/api/client`
+        const data = { appName, redirectUris: `${domainUrl},${callbackUrl}` }
+        const config = { headers: { authorization: localStorage.getItem('user_token') } }
+        console.log(url, data, config)
+        axios.post(url, data, config)
             .then(res => {
                 console.log(res)
-                if (res && res.data) {
+                if (res && res.data && res.data.code === 200) {
                     navigate('/get-cred')
                 }
             })
@@ -24,17 +27,23 @@ function Cred(props) {
             })
     }
 
-    return (
+    return (<>
+        <Navbar />
         <div className="card">
-            <div>
+            <div className="shadow">
                 <input value={appName}
                     placeholder="App Name"
                     onChange={(e) => setappName(e.target.value)}
                     type="text" className="login-input" />
                 <br />
-                <input value={redirectUri}
-                    placeholder="Redirect Uri"
-                    onChange={(e) => setredirectUri(e.target.value)}
+                <input value={domainUrl}
+                    placeholder="Domain url"
+                    onChange={(e) => setdomainUrl(e.target.value)}
+                    type="text" className="login-input" />
+                <br />
+                <input value={callbackUrl}
+                    placeholder="Callback url"
+                    onChange={(e) => setcallbackUrl(e.target.value)}
                     type="text" className="login-input" />
                 <br />
                 <div className="flex-center">
@@ -45,7 +54,7 @@ function Cred(props) {
                 </div>
             </div>
         </div>
-    );
+    </>);
 }
 
 export default Cred;
