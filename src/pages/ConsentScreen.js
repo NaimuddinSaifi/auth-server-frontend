@@ -48,7 +48,7 @@ function ConsentScreen(props) {
                         </div>
                     </div>
                     <div className="user">
-                        <div className="user-img">  {localStorage && localStorage.getItem('user_id') && localStorage.getItem('userId').charAt(0).toUpperCase()} </div>
+                        <div className="user-img">  {localStorage && localStorage.getItem('user_id') && localStorage.getItem('user_id').charAt(0).toUpperCase()} </div>
                         <div className="user-name">   {localStorage && localStorage.getItem('user_id')} </div>
 
                     </div>
