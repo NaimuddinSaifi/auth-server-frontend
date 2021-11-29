@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { toast } from "react-toastify";
 
 function Cred(props) {
     const location = useLocation()
@@ -20,6 +21,9 @@ function Cred(props) {
                 console.log(res)
                 if (res && res.data && res.data.code === 200) {
                     navigate('/get-cred')
+                }
+                if (res && res.data && res.data.code === 404) {
+                    toast(res.data.message)
                 }
             })
             .catch(err => {

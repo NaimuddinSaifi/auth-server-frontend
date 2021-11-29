@@ -2,7 +2,6 @@ import '../App.css'
 import { useState } from 'react'
 import axios from 'axios'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
-import { useEffect } from 'react/cjs/react.development'
 import { toast } from 'react-toastify'
 
 function LoginAuthServer(props) {
@@ -30,7 +29,12 @@ function LoginAuthServer(props) {
                         toast('Login Success.')
                         localStorage.setItem('user_token', res && res.data && res.data.data.user_token)
                         localStorage.setItem('user_id', res && res.data && res.data.data.user_id)
-                        navigate(`/oauth/consent?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`)
+                        if (clientId && redirectUri) {
+                            navigate(`/oauth/consent?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`)
+                        }
+                        if (!clientId || !redirectUri) {
+                            navigate(`/`)
+                        }
                     }
                     if (res && res.data && res.data.code === 404) {
                         toast('User Not Found.')
@@ -69,7 +73,9 @@ function LoginAuthServer(props) {
                     </button>
                 </div>
                 <div className="center">
-                    <Link to={`/oauth/register?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`}>
+                    <Link to={(clientId && redirectUri) ?
+                        `/oauth/register?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`
+                        : `/oauth/register`}>
                         Dont have an account ? Signup
                     </Link>
                 </div>

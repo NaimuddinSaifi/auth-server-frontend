@@ -27,7 +27,7 @@ function SignupAuthServer(props) {
                     console.log(res)
                     if (res && res.data && res.data.code === 200) {
                         toast('Signup Success.')
-                        navigate(loginUrl)
+                        navigate((clientId && redirectUri) ? loginUrl : `/oauth/authorize`)
                     }
                     if (res && res.data && res.data.code === 404) {
                         toast('User Alreday Exists.')
@@ -64,7 +64,7 @@ function SignupAuthServer(props) {
                     </button>
                 </div>
                 <div className="center">
-                    <Link to={loginUrl}>
+                    <Link to={(clientId && redirectUri) ? loginUrl : `/oauth/authorize`}>
                         Already have an account ? Login
                     </Link>
                 </div>

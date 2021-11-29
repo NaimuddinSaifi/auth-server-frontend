@@ -95,3 +95,25 @@
 .box{
   box-shadow: 0 1.6px 3.6px 0 rgba(0,0,0,0.13),0 0.3px 0.9px 0 rgba(0,0,0,0.11);
 }
+.navbar-card{
+  box-shadow: 0 1.6px 3.6px 0 rgba(0,0,0,0.13),0 0.3px 0.9px 0 rgba(0,0,0,0.11);
+  padding: 20px 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.links{
+  text-decoration: none;
+  padding: 10px;
+}
+.links:hover{
+  color: red;
+}
+.pd-10{
+  padding: 3px 8px;
+}
+.text-center{
+  text-align: center;
+}
+.mt-3{
+  margin-top: 10px!important;
+}

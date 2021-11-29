@@ -23,6 +23,7 @@ function EditCred(props) {
                 if (res && res.data && res.data.code === 200) {
                     toast('Updated successfully.')
                     setupdated(!updated)
+                    navigate('/get-cred')
                 }
             })
             .catch(err => {
@@ -83,8 +84,8 @@ function EditCred(props) {
                             )
                         })
                     }
-                    <div className="flex-center">
-                        <button className="submit-btn"
+                    <div className="flex-center mt-3">
+                        <button className="submit-btn mt-3"
                             onClick={handleSubmit}>
                             EDIT
                         </button>
